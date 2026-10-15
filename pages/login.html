@@ -735,7 +735,8 @@
                 } else {
                     users = [
                         {id:"USR-ADMIN",name:"Canteen Owner",username:"admin",password:"admin123",role:"Administrator",status:"active"},
-                        {id:"USR-STAFF",name:"Canteen Staff",username:"staff",password:"staff123",role:"Staff",status:"active"}
+                        {id:"USR-STAFF",name:"Canteen Staff",username:"staff",password:"staff123",role:"Staff",status:"active"},
+                        {id:"USR-SUPERADMIN",name:"School Administrator",username:"superadmin",password:"superadmin123",role:"Superadmin",status:"active"}
                     ];
                     localStorage.setItem(USERS_KEY, JSON.stringify(users));
                 }
@@ -749,9 +750,26 @@
                 }
 
                 if (!users.length) {
-                    users = [{id:"USR-ADMIN",name:"Canteen Owner",username:"admin",password:"admin123",role:"Administrator",status:"active"},{id:"USR-STAFF",name:"Canteen Staff",username:"staff",password:"staff123",role:"Staff",status:"active"}];
+                    users = [{id:"USR-ADMIN",name:"Canteen Owner",username:"admin",password:"admin123",role:"Administrator",status:"active"},{id:"USR-STAFF",name:"Canteen Staff",username:"staff",password:"staff123",role:"Staff",status:"active"},{id:"USR-SUPERADMIN",name:"School Administrator",username:"superadmin",password:"superadmin123",role:"Superadmin",status:"active"}];
                     localStorage.setItem(USERS_KEY, JSON.stringify(users));
                 }
+
+                const superadministrator = users.find(function(user) {
+                    return String(user.role || "").toLowerCase() === "superadmin";
+                });
+
+                if (!superadministrator) {
+                    users.push({
+                        id: "USR-SUPERADMIN",
+                        name: "School Administrator",
+                        username: "superadmin",
+                        password: "superadmin123",
+                        role: "Superadmin",
+                        status: "active"
+                    });
+                    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+                }
+
                 const administrators =
                     users.filter(
                         function(user) {

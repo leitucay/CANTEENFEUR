@@ -54,7 +54,7 @@
         "customers.html"
     ];
 
-    const adminOnlyPages = ["products.html", "inventory.html", "reports.html", "customers.html", "settings.html", "account.html"];
+    const adminOnlyPages = ["products.html", "inventory.html", "reports.html", "customers.html", "settings.html", "account.html", "rental.html"];
 
     if (
         currentPage !== "login.html"
@@ -88,6 +88,14 @@
                     "../index.html";
             }
         }
+
+        if (
+            currentSession &&
+            currentPage === "rental.html" &&
+            String(currentSession.role || "").toLowerCase() !== "superadmin"
+        ) {
+            window.location.href = "../index.html";
+        }
     }
 
     document.addEventListener(
@@ -105,6 +113,8 @@
 
             loadDashboard();
 
+            setupSuperadminNavigation();
+
             setupUserSession();
 
             setupMobileNavigation();
@@ -113,6 +123,26 @@
 
         }
     );
+
+    function setupSuperadminNavigation() {
+        if (String(currentSession && currentSession.role || "").toLowerCase() !== "superadmin") {
+            return;
+        }
+
+        const navigation = document.querySelector(".navigation");
+        if (!navigation || navigation.querySelector('a[href$="rental.html"]')) {
+            return;
+        }
+
+        const link = document.createElement("a");
+        link.href = window.location.pathname.includes("/pages/")
+            ? "rental.html"
+            : "pages/rental.html";
+        link.className = "nav-item";
+        link.innerHTML = '<span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h3"/></svg></span><span>Rental Management</span>';
+        const settingsLink = navigation.querySelector('a[href$="settings.html"]');
+        navigation.insertBefore(link, settingsLink || null);
+    }
 
     function setupAvatarMotion() {
         document.querySelectorAll(".profile-avatar").forEach(function(avatar) {
@@ -224,12 +254,11 @@
 
             if (role) {
 
-                role.textContent =
-                    String(
-                        user.role || ""
-                    ).toLowerCase() ===
-                    "administrator"
-                        ? "Owner"
+                const normalizedRole = String(user.role || "").toLowerCase();
+                role.textContent = normalizedRole === "administrator"
+                    ? "Owner"
+                    : normalizedRole === "superadmin"
+                        ? "School Administrator"
                         : "Staff";
             }
 
@@ -250,7 +279,8 @@
             return;
         }
 
-        const isAdministrator = String(user.role || "").toLowerCase() === "administrator";
+        const normalizedRole = String(user.role || "").toLowerCase();
+        const isAdministrator = normalizedRole === "administrator" || normalizedRole === "superadmin";
         const dropdown = document.createElement("div");
         const identity = document.createElement("div");
         const name = document.createElement("strong");
@@ -261,7 +291,9 @@
         dropdown.setAttribute("role", "menu");
         identity.className = "profile-dropdown-identity";
         name.textContent = user.name || user.username || "User";
-        role.textContent = isAdministrator ? "Owner" : "Staff";
+        role.textContent = normalizedRole === "superadmin"
+            ? "School Administrator"
+            : isAdministrator ? "Owner" : "Staff";
         identity.append(name, role);
         dropdown.appendChild(identity);
 
@@ -273,6 +305,16 @@
             accountLink.setAttribute("role", "menuitem");
             accountLink.textContent = "Account Management";
             dropdown.appendChild(accountLink);
+        }
+
+        if (normalizedRole === "superadmin") {
+            const rentalLink = document.createElement("a");
+            rentalLink.href = window.location.pathname.includes("/pages/")
+                ? "rental.html"
+                : "pages/rental.html";
+            rentalLink.setAttribute("role", "menuitem");
+            rentalLink.textContent = "Rental Management";
+            dropdown.appendChild(rentalLink);
         }
 
         document.body.appendChild(dropdown);
