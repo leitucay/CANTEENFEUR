@@ -8,9 +8,70 @@
     <link rel="stylesheet" href="../css/canteen_motion.css">
     <link rel="stylesheet" href="../css/canteen_theme.css">
     <style>
-        .rental-page{max-width:1500px;margin:auto;padding:38px 42px 30px}.rental-heading{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:24px}.rental-heading h2{margin-top:8px;font-family:"Playfair Display",Georgia,serif;font-size:38px;letter-spacing:-1px}.rental-heading p{margin-top:7px;color:#8d96aa;font-size:12px}.rental-primary,.rental-secondary{min-height:42px;padding:0 16px;border-radius:9px;font-size:11px;font-weight:750;cursor:pointer;transition:.2s ease}.rental-primary{border:0;background:#f8fafc;color:#151221}.rental-secondary{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#c1c7d4}.rental-primary:hover,.rental-secondary:hover{transform:translateY(-2px)}.rental-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:18px}.rental-stat,.rental-card{border:1px solid rgba(255,255,255,.08);border-radius:15px;background:rgba(255,255,255,.04)}.rental-stat{padding:18px}.rental-stat span{color:#8d96aa;font-size:10px}.rental-stat strong{display:block;margin-top:8px;color:#f1f3f8;font-size:25px}.rental-card{padding:20px}.rental-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px}.rental-toolbar h3{font-family:"Playfair Display",Georgia,serif;font-size:21px}.rental-search{width:min(310px,100%);height:39px;padding:0 12px;border:1px solid rgba(255,255,255,.1);border-radius:9px;background:rgba(255,255,255,.035);color:#fff;font-size:11px}.rental-table-wrap{overflow-x:auto}.rental-table{width:100%;border-collapse:collapse;min-width:820px}.rental-table th{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.09);color:#7d869a;text-align:left;font-size:9px;letter-spacing:.7px;text-transform:uppercase}.rental-table td{padding:14px 10px;border-bottom:1px solid rgba(255,255,255,.055);color:#c1c7d4;font-size:11px;vertical-align:middle}.rental-table tr:last-child td{border-bottom:0}.owner-cell strong{display:block;color:#f1f3f8;font-size:12px}.owner-cell span,.credential-cell span{display:block;margin-top:4px;color:#788196;font-size:10px}.status-pill{display:inline-flex;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:750}.status-paid{background:rgba(34,197,94,.12);color:#86efac}.status-due{background:rgba(245,158,11,.12);color:#fcd34d}.status-overdue{background:rgba(244,63,94,.12);color:#fda4af}.status-unset{background:rgba(148,163,184,.12);color:#cbd5e1}.row-actions{display:flex;flex-wrap:wrap;gap:6px}.row-actions button{min-height:30px;padding:0 9px;border:1px solid rgba(255,255,255,.1);border-radius:7px;background:rgba(255,255,255,.04);color:#c1c7d4;font-size:9px;font-weight:700;cursor:pointer}.row-actions button:hover{background:rgba(255,255,255,.1)}.row-actions .mark-paid{border-color:rgba(34,197,94,.25);color:#86efac}.rental-empty{padding:36px 15px;color:#8d96aa;text-align:center;font-size:11px}.rental-dialog{width:min(560px,calc(100% - 28px));max-height:calc(100% - 28px);padding:0;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:#161a27;color:#e7e9ef;box-shadow:0 24px 80px rgba(0,0,0,.5)}.rental-dialog::backdrop{background:rgba(5,8,15,.72);backdrop-filter:blur(4px)}.rental-dialog form{padding:24px}.dialog-heading{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}.dialog-heading h3{font-family:"Playfair Display",Georgia,serif;font-size:22px}.dialog-heading p{margin-top:5px;color:#818a9e;font-size:10px}.dialog-close{width:32px;height:32px;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:rgba(255,255,255,.04);color:#d1d5df;font-size:19px;cursor:pointer}.rental-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.rental-field{display:flex;flex-direction:column;gap:6px}.rental-field.full{grid-column:1/-1}.rental-field label{color:#929bae;font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase}.rental-field input{height:40px;padding:0 11px;border:1px solid rgba(255,255,255,.1);border-radius:8px;outline:0;background:rgba(255,255,255,.04);color:#fff;font-size:11px}.rental-field input:focus{border-color:#d4af37}.rental-field small{color:#778094;font-size:9px}.dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.rental-toast{position:fixed;right:24px;bottom:24px;z-index:30;padding:12px 15px;border:1px solid rgba(255,255,255,.12);border-radius:9px;background:#161a27;color:#eef2f8;font-size:11px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}.rental-toast.show{opacity:1;transform:translateY(0)}.rental-toast.error{border-color:rgba(244,63,94,.4);color:#fda4af}
+        .rental-page{max-width:1600px;margin:auto;padding:30px 38px;color:#1F2937;font-family:Inter,"Segoe UI",Arial,sans-serif}
+        .rental-heading{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:24px}
+        .rental-heading h2{margin-top:8px;font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:38px;font-weight:750;letter-spacing:-.02em;color:#064E3B}
+        .rental-heading p{margin-top:7px;color:#475569;font-size:15px;line-height:1.5}
+        .rental-primary,.rental-secondary{min-height:42px;padding:0 16px;border-radius:8px;font:650 14px/1.2 Inter,"Segoe UI",Arial,sans-serif;cursor:pointer;transition:.2s ease}
+        .rental-primary{border:1px solid #0B5D3B;background:#0B5D3B;color:#fff}
+        .rental-primary:hover{background:#137A4B}
+        .rental-secondary{border:1px solid #D4AF37;background:#fff;color:#0B5D3B}
+        .rental-secondary:hover{background:#EAF5EF}
+        .rental-primary:hover,.rental-secondary:hover{transform:translateY(-1px)}
+        .rental-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}
+        .rental-stat,.rental-card{border:1px solid #DCE6E1;border-radius:16px;background:#fff;box-shadow:0 4px 14px rgba(15,55,37,.06)}
+        .rental-stat{padding:20px}
+        .rental-stat span{color:#475569;font-size:13px;font-weight:700}
+        .rental-stat strong{display:block;margin-top:8px;color:#0B3D2E;font-size:30px}
+        .rental-card{padding:22px}
+        .rental-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px}
+        .rental-toolbar h3{font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:21px;font-weight:700;color:#0B3D2E}
+        .rental-search{width:min(310px,100%);height:44px;padding:0 12px;border:1px solid #DCE6E1;border-radius:9px;background:#fff;color:#1F2937;font:14px Inter,"Segoe UI",Arial,sans-serif}
+        .rental-table-wrap{overflow-x:auto}
+        .rental-table{width:100%;border-collapse:collapse;min-width:980px}
+        .rental-table th{padding:12px 10px;border-bottom:1px solid #DCE6E1;color:#475569;text-align:left;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+        .rental-table td{padding:14px 10px;border-bottom:1px solid #E8EEE9;color:#1F2937;font-size:14px;line-height:1.45;vertical-align:middle}
+        .rental-table tr:last-child td{border-bottom:0}
+        .owner-cell strong,.credential-cell strong{display:block;color:#1F2937;font-size:15px}
+        .owner-cell span,.credential-cell span,.payment-cell small{display:block;margin-top:4px;color:#64748B;font-size:13px}
+        .status-pill{display:inline-flex;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:700}
+        .status-paid{background:#EAF5EF;color:#0B5D3B}
+        .status-due{background:#FFF5D8;color:#805B00}
+        .status-overdue{background:#FDECEC;color:#B42318}
+        .status-unset{background:#F1F5F9;color:#475569}
+        .row-actions{display:flex;flex-wrap:wrap;gap:6px}
+        .row-actions button{min-height:34px;padding:0 10px;border:1px solid #CFE2D5;border-radius:7px;background:#EAF5EF;color:#0B5D3B;font:600 13px Inter,"Segoe UI",Arial,sans-serif;cursor:pointer}
+        .row-actions button:hover{background:#DDEFE3}
+        .row-actions button:disabled{opacity:.55;cursor:not-allowed}
+        .row-actions .danger-action{border-color:#F4C7C7;background:#FDECEC;color:#B42318}
+        .rental-empty{padding:36px 15px;color:#475569;text-align:center;font-size:14px}
+        .rental-dialog{position:fixed;inset:0;margin:auto;width:min(560px,calc(100% - 28px));max-height:calc(100% - 28px);padding:0;overflow:auto;border:1px solid #D4AF37;border-radius:16px;background:#fff;color:#1F2937;font-family:Inter,"Segoe UI",Arial,sans-serif;box-shadow:0 24px 80px rgba(11,93,59,.22)}
+        .rental-dialog::backdrop{background:rgba(11,61,46,.58);backdrop-filter:blur(3px)}
+        .rental-dialog form{padding:24px}
+        .rental-dialog-content{padding:24px}
+        .dialog-heading{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px}
+        .dialog-heading h3{font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:22px;font-weight:700;color:#064E3B}
+        .dialog-heading p{margin-top:5px;color:#475569;font-size:13px}
+        .dialog-close{width:34px;height:34px;border:1px solid #D4AF37;border-radius:8px;background:#fff;color:#0B5D3B;font:22px Inter,"Segoe UI",Arial,sans-serif;cursor:pointer}
+        .rental-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .rental-field{display:flex;flex-direction:column;gap:6px}
+        .rental-field.full{grid-column:1/-1}
+        .rental-field label{color:#475569;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+        .rental-field input{height:42px;padding:0 11px;border:1px solid #CEDBD2;border-radius:8px;outline:0;background:#fff;color:#1F2937;font:14px Inter,"Segoe UI",Arial,sans-serif}
+        .rental-field input:focus{border-color:#137A4B;box-shadow:0 0 0 3px rgba(19,122,75,.12)}
+        .rental-field small{color:#64748B;font-size:12px}
+        .dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+        .history-dialog{width:min(620px,calc(100% - 28px))}
+        .history-list{display:flex;flex-direction:column;gap:8px;max-height:55vh;overflow:auto}
+        .history-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 12px;border:1px solid #DCE6E1;border-radius:9px;background:#F8FBF9}
+        .history-row strong{color:#1F2937;font-size:14px}
+        .history-row span{display:block;margin-top:3px;color:#64748B;font-size:12px}
+        .history-row button{min-height:32px;padding:0 10px;border:1px solid #CFE2D5;border-radius:7px;background:#EAF5EF;color:#0B5D3B;font:600 12px Inter,"Segoe UI",Arial,sans-serif;cursor:pointer}
+        .rental-toast{position:fixed;right:24px;bottom:24px;z-index:30;padding:12px 15px;border:1px solid #DCE6E1;border-radius:9px;background:#fff;color:#1F2937;font-size:14px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}
+        .rental-toast.show{opacity:1;transform:translateY(0)}
+        .rental-toast.error{border-color:#F4C7C7;color:#B42318}
         @media(max-width:850px){.rental-page{padding:28px 22px}.rental-heading{align-items:flex-start;flex-direction:column}.rental-stats{grid-template-columns:1fr 1fr}.rental-stats .rental-stat:last-child{grid-column:1/-1}}
-        @media(max-width:560px){.rental-page{padding:22px 14px}.rental-heading h2{font-size:31px}.rental-stats{gap:8px}.rental-stat{padding:14px}.rental-stat strong{font-size:21px}.rental-toolbar{align-items:stretch;flex-direction:column}.rental-search{width:100%}.rental-card{padding:14px}.rental-form-grid{grid-template-columns:1fr}.rental-field.full{grid-column:auto}.rental-dialog form{padding:19px}}
+        @media(max-width:560px){.rental-page{padding:22px 14px}.rental-heading h2{font-size:31px}.rental-stats{gap:8px}.rental-stat{padding:14px}.rental-stat strong{font-size:21px}.rental-toolbar{align-items:stretch;flex-direction:column}.rental-search{width:100%}.rental-card{padding:14px}.rental-form-grid{grid-template-columns:1fr}.rental-field.full{grid-column:auto}.rental-dialog form,.rental-dialog-content{padding:19px}}
     </style>
 </head>
 <body>
@@ -53,7 +114,7 @@
                 <div class="rental-toolbar"><h3>Store Rentals</h3><input class="rental-search" id="ownerSearch" type="search" placeholder="Search stores or owners" aria-label="Search stores or owners"></div>
                 <div class="rental-table-wrap">
                     <table class="rental-table">
-                        <thead><tr><th>Store owner</th><th>Account</th><th>Rental</th><th>Due date</th><th>Payment</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>Store owner</th><th>Account</th><th>Rent amount</th><th>Due date</th><th>Actions</th><th>Payment history &amp; status</th></tr></thead>
                         <tbody id="rentalRows"></tbody>
                     </table>
                 </div>
@@ -73,10 +134,18 @@
                 <div class="rental-field"><label for="ownerUsername">Username</label><input id="ownerUsername" required maxlength="40" autocomplete="username"></div>
                 <div class="rental-field"><label for="ownerPassword">Password <span id="passwordLabel"></span></label><input id="ownerPassword" type="password" minlength="4" autocomplete="new-password"><small id="passwordHint">Required for a new owner.</small></div>
                 <div class="rental-field"><label for="rentalAmount">Rental amount (₱)</label><input id="rentalAmount" type="number" min="0" step="0.01" required></div>
-                <div class="rental-field"><label for="rentalDueDate">Due date</label><input id="rentalDueDate" type="date" required></div>
+                <div class="rental-field"><label for="rentalDueDay">Due day each month</label><input id="rentalDueDay" type="number" min="1" max="31" step="1" placeholder="e.g. 15" required></div>
+                <div class="rental-field"><label for="rentalStartMonth">First billing month</label><input id="rentalStartMonth" type="month" required></div>
             </div>
             <div class="dialog-actions"><button class="rental-secondary" id="cancelDialog" type="button">Cancel</button><button class="rental-primary" id="saveOwnerButton" type="submit">Save Store Owner</button></div>
         </form>
+    </dialog>
+    <dialog class="rental-dialog history-dialog" id="historyDialog">
+        <div class="rental-dialog-content">
+            <div class="dialog-heading"><div><h3 id="historyTitle">Payment History</h3><p id="historySummary"></p></div><button type="button" class="dialog-close" id="closeHistory" aria-label="Close">×</button></div>
+            <div class="history-list" id="historyList"></div>
+            <div class="dialog-actions"><button class="rental-secondary" id="doneHistory" type="button">Done</button></div>
+        </div>
     </dialog>
     <div class="rental-toast" id="rentalToast" role="status" aria-live="polite"></div>
     <script src="../js/app.js"></script>
@@ -86,7 +155,12 @@
             const USERS_KEY = "feuCanteenUsers";
             const RENTALS_KEY = "feuCanteenRentals";
             const SESSION_KEY = "feuCanteenSession";
-            const session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+            let session;
+            try {
+                session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+            } catch (error) {
+                session = null;
+            }
             if (!session || String(session.role || "").toLowerCase() !== "superadmin") {
                 window.location.href = "../index.html";
                 return;
@@ -95,10 +169,12 @@
             const rows = document.getElementById("rentalRows");
             const empty = document.getElementById("rentalEmpty");
             const dialog = document.getElementById("ownerDialog");
+            const historyDialog = document.getElementById("historyDialog");
             const form = document.getElementById("ownerForm");
             const password = document.getElementById("ownerPassword");
             const toast = document.getElementById("rentalToast");
             let toastTimer;
+            let historyOwnerId = null;
 
             function readArray(key) {
                 const value = JSON.parse(localStorage.getItem(key) || "[]");
@@ -111,6 +187,32 @@
                 if (!value || typeof value !== "object" || Array.isArray(value)) {
                     throw new Error("Stored rental data is invalid.");
                 }
+                let migrated = false;
+                Object.keys(value).forEach(function(ownerId) {
+                    const rental = value[ownerId];
+                    if (!rental || typeof rental !== "object") return;
+                    if (!rental.startMonth && /^\d{4}-\d{2}-\d{2}$/.test(String(rental.dueDate || ""))) {
+                        rental.dueDay = Number(rental.dueDate.slice(8, 10));
+                        rental.startMonth = rental.dueDate.slice(0, 7);
+                        rental.paymentHistory = rental.paymentHistory || {};
+                        if (rental.paid) {
+                            rental.paymentHistory[rental.startMonth] = {
+                                paidAt: rental.verifiedAt || new Date().toISOString(),
+                                verifiedBy: rental.verifiedBy || "Previously verified"
+                            };
+                        }
+                        delete rental.dueDate;
+                        delete rental.paid;
+                        delete rental.verifiedAt;
+                        delete rental.verifiedBy;
+                        migrated = true;
+                    }
+                    if (!rental.paymentHistory || typeof rental.paymentHistory !== "object" || Array.isArray(rental.paymentHistory)) {
+                        rental.paymentHistory = {};
+                        migrated = true;
+                    }
+                });
+                if (migrated) localStorage.setItem(RENTALS_KEY, JSON.stringify(value));
                 return value;
             }
 
@@ -126,15 +228,58 @@
                 });
             }
 
-            function localDateString(date) {
-                return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0"), String(date.getDate()).padStart(2, "0")].join("-");
+            function monthKey(date) {
+                return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0")].join("-");
             }
 
-            function formatDate(value) {
-                if (!value) return "Not set";
-                const parts = String(value).split("-").map(Number);
-                if (parts.length !== 3 || parts.some(function(part) { return !part; })) return "Invalid date";
-                return new Date(parts[0], parts[1] - 1, parts[2]).toLocaleDateString();
+            function formatMonth(value) {
+                const parts = String(value || "").split("-").map(Number);
+                if (parts.length !== 2 || !parts[0] || !parts[1]) return "Unknown month";
+                return new Date(parts[0], parts[1] - 1, 1).toLocaleDateString(undefined, {month:"long", year:"numeric"});
+            }
+
+            function dueCycles(rental) {
+                if (!rental || !/^\d{4}-\d{2}$/.test(String(rental.startMonth || ""))) return [];
+                const [startYear, startMonth] = rental.startMonth.split("-").map(Number);
+                const dueDay = Math.min(31, Math.max(1, Number(rental.dueDay) || 1));
+                const today = new Date();
+                const current = new Date(today.getFullYear(), today.getMonth(), 1);
+                const first = new Date(startYear, startMonth - 1, 1);
+                const cycles = [];
+                for (let month = new Date(first); month <= current; month.setMonth(month.getMonth() + 1)) {
+                    const dueDate = new Date(month.getFullYear(), month.getMonth(), Math.min(dueDay, new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate()));
+                    if (dueDate <= today) {
+                        const key = monthKey(month);
+                        cycles.push({month:key, dueDate:dueDate, payment:rental.paymentHistory && rental.paymentHistory[key]});
+                    }
+                }
+                return cycles;
+            }
+
+            function outstandingCycles(rental) {
+                return dueCycles(rental).filter(function(cycle) { return !cycle.payment; });
+            }
+
+            function reconcileOwnerAccess(users, rentals) {
+                let changed = false;
+                users.forEach(function(owner) {
+                    if (String(owner.role || "").toLowerCase() !== "administrator" || !rentals[owner.id]) return;
+                    if (outstandingCycles(rentals[owner.id]).length >= 3) {
+                        if (owner.status !== "inactive") {
+                            owner.status = "inactive";
+                            owner.disabledReason = "rental";
+                            changed = true;
+                        } else if (!owner.disabledReason) {
+                            owner.disabledReason = "manual";
+                            changed = true;
+                        }
+                    } else if (owner.disabledReason === "rental") {
+                        owner.status = "active";
+                        delete owner.disabledReason;
+                        changed = true;
+                    }
+                });
+                if (changed) localStorage.setItem(USERS_KEY, JSON.stringify(users));
             }
 
             function showToast(message, isError) {
@@ -145,52 +290,67 @@
                 toastTimer = setTimeout(function() { toast.classList.remove("show"); }, 3200);
             }
 
-            function rentalState(rental) {
-                if (!rental || !rental.dueDate) return {label:"Not configured", className:"status-unset"};
-                if (rental.paid) return {label:"Paid", className:"status-paid"};
-                if (rental.dueDate < localDateString(new Date())) return {label:"Overdue", className:"status-overdue"};
-                return {label:"Due", className:"status-due"};
+            function rentalState(rental, outstanding) {
+                if (!rental || !rental.startMonth) return {label:"Not configured", className:"status-unset"};
+                if (!outstanding.length && dueCycles(rental).length) return {label:"Paid", className:"status-paid"};
+                if (outstanding.some(function(cycle) {
+                    return cycle.dueDate < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+                })) return {label:"Overdue", className:"status-overdue"};
+                return {label:"Unpaid", className:"status-due"};
             }
 
             function render() {
                 try {
-                    const owners = ownerUsers();
+                    const users = readArray(USERS_KEY);
                     const rentals = readRentals();
+                    reconcileOwnerAccess(users, rentals);
+                    const owners = users.filter(function(user) {
+                        return String(user.role || "").toLowerCase() === "administrator";
+                    });
                     const query = document.getElementById("ownerSearch").value.trim().toLowerCase();
                     const visibleOwners = owners.filter(function(owner) {
                         return [owner.name, owner.storeName, owner.username].some(function(value) {
                             return String(value || "").toLowerCase().includes(query);
                         });
                     });
-                    const paid = owners.filter(function(owner) { return rentals[owner.id] && rentals[owner.id].paid; }).length;
+                    const paid = owners.filter(function(owner) {
+                        const rental = rentals[owner.id];
+                        return rental && dueCycles(rental).length && !outstandingCycles(rental).length;
+                    }).length;
                     const overdue = owners.filter(function(owner) {
                         const rental = rentals[owner.id];
-                        return rental && !rental.paid && rental.dueDate && rental.dueDate < localDateString(new Date());
+                        return rental && outstandingCycles(rental).some(function(cycle) {
+                            return cycle.dueDate < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+                        });
                     }).length;
                     document.getElementById("ownerCount").textContent = String(owners.length);
                     document.getElementById("paidCount").textContent = String(paid);
                     document.getElementById("overdueCount").textContent = String(overdue);
                     rows.innerHTML = visibleOwners.map(function(owner) {
                         const rental = rentals[owner.id] || null;
-                        const state = rentalState(rental);
+                        const outstanding = outstandingCycles(rental);
+                        const state = rentalState(rental, outstanding);
                         const name = escapeHTML(owner.name || owner.username || "Store owner");
                         const store = escapeHTML(owner.storeName || "Store name not set");
                         const username = escapeHTML(owner.username || "—");
                         const amount = rental && Number.isFinite(Number(rental.amount))
                             ? "₱" + Number(rental.amount).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})
                             : "Not set";
-                        const paymentDetail = rental && rental.paid && rental.verifiedAt
-                            ? '<span>Verified ' + escapeHTML(formatDate(rental.verifiedAt.slice(0, 10))) + '</span>'
-                            : "";
+                        const arrears = outstanding.length * (Number(rental && rental.amount) || 0);
+                        const paymentDetail = outstanding.length
+                            ? '<small>' + outstanding.length + ' unpaid month' + (outstanding.length === 1 ? "" : "s") + ' · ₱' + arrears.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + ' due</small>'
+                            : '<small>' + (dueCycles(rental).length ? "All due months paid" : "No billing periods due") + '</small>';
+                        const accountState = owner.status === "inactive"
+                            ? '<span class="status-pill status-overdue">Disabled' + (owner.disabledReason === "rental" ? " · 3+ months unpaid" : "") + '</span>'
+                            : '<span class="status-pill status-paid">Active</span>';
                         return '<tr><td class="owner-cell"><strong>' + name + '</strong><span>' + store + '</span></td>' +
-                            '<td class="credential-cell"><strong>' + username + '</strong><span>Store owner account</span></td>' +
-                            '<td>' + amount + '</td><td>' + escapeHTML(formatDate(rental && rental.dueDate)) + '</td>' +
-                            '<td><span class="status-pill ' + state.className + '">' + state.label + '</span>' + paymentDetail + '</td>' +
+                            '<td class="credential-cell"><strong>' + username + '</strong>' + accountState + '</td>' +
+                            '<td>' + amount + '</td><td>' + (rental && rental.dueDay ? "Every " + rental.dueDay + (rental.dueDay % 10 === 1 && rental.dueDay !== 11 ? "st" : rental.dueDay % 10 === 2 && rental.dueDay !== 12 ? "nd" : rental.dueDay % 10 === 3 && rental.dueDay !== 13 ? "rd" : "th") + " of the month" : "Not set") + '</td>' +
                             '<td><div class="row-actions"><button type="button" data-edit="' + escapeHTML(owner.id) + '">Edit</button>' +
-                            (rental && rental.dueDate
-                                ? '<button type="button" class="mark-paid" data-payment="' + escapeHTML(owner.id) + '">' + (rental.paid ? "Mark unpaid" : "Verify payment") + '</button>'
-                                : '<button type="button" data-edit="' + escapeHTML(owner.id) + '">Set rental</button>') +
-                            '</div></td></tr>';
+                            '<button type="button" data-toggle="' + escapeHTML(owner.id) + '">' + (owner.status === "inactive" ? "Enable" : "Disable") + '</button>' +
+                            '<button type="button" class="danger-action" data-delete="' + escapeHTML(owner.id) + '">Delete</button></div></td>' +
+                            '<td class="payment-cell"><span class="status-pill ' + state.className + '">' + state.label + '</span>' + paymentDetail +
+                            '<div class="row-actions"><button type="button" data-history="' + escapeHTML(owner.id) + '"' + (rental ? "" : " disabled") + '>Payment history</button></div></td></tr>';
                     }).join("");
                     empty.hidden = visibleOwners.length > 0;
                     empty.textContent = owners.length ? "No store owners match your search." : "No store owners found.";
@@ -208,6 +368,7 @@
                 document.getElementById("dialogTitle").textContent = ownerId ? "Edit Store Owner" : "Add Store Owner";
                 document.getElementById("saveOwnerButton").textContent = ownerId ? "Save Changes" : "Save Store Owner";
                 document.getElementById("passwordHint").textContent = ownerId ? "Leave blank to keep the current password." : "Required for a new owner.";
+                document.getElementById("rentalStartMonth").value = monthKey(new Date());
                 password.required = !ownerId;
                 password.value = "";
                 if (ownerId) {
@@ -219,7 +380,8 @@
                         document.getElementById("storeName").value = owner.storeName || "";
                         document.getElementById("ownerUsername").value = owner.username || "";
                         document.getElementById("rentalAmount").value = rental.amount == null ? "" : rental.amount;
-                        document.getElementById("rentalDueDate").value = rental.dueDate || "";
+                        document.getElementById("rentalDueDay").value = rental.dueDay || "";
+                        document.getElementById("rentalStartMonth").value = rental.startMonth || monthKey(new Date());
                     } catch (error) {
                         showToast(error.message || "Could not load store owner.", true);
                         return;
@@ -239,27 +401,109 @@
                 }).join("");
             }
 
+            function openPaymentHistory(ownerId) {
+                try {
+                    const owner = ownerUsers().find(function(user) { return String(user.id) === ownerId; });
+                    const rental = readRentals()[ownerId];
+                    if (!owner || !rental) throw new Error("Rental details not found.");
+                    historyOwnerId = ownerId;
+                    const cycles = dueCycles(rental);
+                    const outstanding = cycles.filter(function(cycle) { return !cycle.payment; });
+                    const amountDue = outstanding.length * (Number(rental.amount) || 0);
+                    document.getElementById("historyTitle").textContent = (owner.storeName || owner.name || "Store") + " payment history";
+                    document.getElementById("historySummary").textContent = outstanding.length
+                        ? outstanding.length + " unpaid month" + (outstanding.length === 1 ? "" : "s") + " · ₱" + amountDue.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + " total outstanding"
+                        : "No outstanding rent for due months.";
+                    document.getElementById("historyList").innerHTML = cycles.length ? cycles.map(function(cycle) {
+                        const paid = Boolean(cycle.payment);
+                        const detail = paid
+                            ? "Paid " + new Date(cycle.payment.paidAt).toLocaleDateString() + (cycle.payment.verifiedBy ? " · " + escapeHTML(cycle.payment.verifiedBy) : "")
+                            : "₱" + (Number(rental.amount) || 0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + " unpaid";
+                        return '<div class="history-row"><div><strong>' + escapeHTML(formatMonth(cycle.month)) + '</strong><span>' + detail + '</span></div><button type="button" data-cycle="' + cycle.month + '">' + (paid ? "Mark unpaid" : "Verify paid") + '</button></div>';
+                    }).join("") : '<div class="rental-empty">No billing months are due yet.</div>';
+                    historyDialog.showModal();
+                } catch (error) {
+                    showToast(error.message || "Could not load payment history.", true);
+                }
+            }
+
             document.getElementById("addOwnerButton").addEventListener("click", function() { openOwnerDialog(""); });
             document.getElementById("closeDialog").addEventListener("click", function() { dialog.close(); });
             document.getElementById("cancelDialog").addEventListener("click", function() { dialog.close(); });
+            document.getElementById("closeHistory").addEventListener("click", function() { historyDialog.close(); });
+            document.getElementById("doneHistory").addEventListener("click", function() { historyDialog.close(); });
             document.getElementById("ownerSearch").addEventListener("input", render);
-            rows.addEventListener("click", async function(event) {
+            rows.addEventListener("click", function(event) {
                 const editButton = event.target.closest("[data-edit]");
                 if (editButton) {
                     openOwnerDialog(editButton.dataset.edit);
                     return;
                 }
-                const paymentButton = event.target.closest("[data-payment]");
-                if (!paymentButton) return;
+                const historyButton = event.target.closest("[data-history]");
+                if (historyButton) {
+                    openPaymentHistory(historyButton.dataset.history);
+                    return;
+                }
+                const toggleButton = event.target.closest("[data-toggle]");
+                if (toggleButton) {
+                    const ownerId = toggleButton.dataset.toggle;
+                    const users = readArray(USERS_KEY);
+                    const owner = users.find(function(user) { return String(user.id) === ownerId; });
+                    if (!owner) {
+                        showToast("Store owner account not found.", true);
+                        return;
+                    }
+                    if (owner.status === "inactive") {
+                        if (owner.disabledReason === "rental" && outstandingCycles(readRentals()[ownerId]).length >= 3) {
+                            showToast("This account has 3 or more unpaid months. Verify enough payments before enabling it.", true);
+                            return;
+                        }
+                        owner.status = "active";
+                        delete owner.disabledReason;
+                    } else {
+                        owner.status = "inactive";
+                        owner.disabledReason = "manual";
+                    }
+                    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+                    showToast(owner.status === "active" ? "Store owner account enabled." : "Store owner account disabled.", false);
+                    render();
+                    return;
+                }
+                const deleteButton = event.target.closest("[data-delete]");
+                if (deleteButton) {
+                    const ownerId = deleteButton.dataset.delete;
+                    const users = readArray(USERS_KEY);
+                    const owner = users.find(function(user) { return String(user.id) === ownerId; });
+                    if (!owner || !confirm("Permanently delete " + (owner.storeName || owner.name || owner.username) + "'s account and rental record?")) return;
+                    localStorage.setItem(USERS_KEY, JSON.stringify(users.filter(function(user) { return String(user.id) !== ownerId; })));
+                    const rentals = readRentals();
+                    delete rentals[ownerId];
+                    localStorage.setItem(RENTALS_KEY, JSON.stringify(rentals));
+                    showToast("Store owner account deleted.", false);
+                    render();
+                }
+            });
+
+            document.getElementById("historyList").addEventListener("click", function(event) {
+                const button = event.target.closest("[data-cycle]");
+                if (!button || !historyOwnerId) return;
                 try {
                     const rentals = readRentals();
-                    const rental = rentals[paymentButton.dataset.payment];
-                    if (!rental) throw new Error("Set up rental details before verifying payment.");
-                    rental.paid = !rental.paid;
-                    rental.verifiedAt = rental.paid ? new Date().toISOString() : null;
-                    rental.verifiedBy = rental.paid ? (session.name || session.username) : null;
+                    const rental = rentals[historyOwnerId];
+                    if (!rental) throw new Error("Rental details not found.");
+                    rental.paymentHistory = rental.paymentHistory || {};
+                    if (rental.paymentHistory[button.dataset.cycle]) {
+                        delete rental.paymentHistory[button.dataset.cycle];
+                    } else {
+                        rental.paymentHistory[button.dataset.cycle] = {
+                            paidAt: new Date().toISOString(),
+                            verifiedBy: session.name || session.username
+                        };
+                    }
                     localStorage.setItem(RENTALS_KEY, JSON.stringify(rentals));
-                    showToast(rental.paid ? "Payment verified and marked as paid." : "Payment marked as unpaid.", false);
+                    reconcileOwnerAccess(readArray(USERS_KEY), rentals);
+                    showToast(rental.paymentHistory[button.dataset.cycle] ? "Payment verified and marked as paid." : "Payment marked as unpaid.", false);
+                    openPaymentHistory(historyOwnerId);
                     render();
                 } catch (error) {
                     showToast(error.message || "Could not update payment status.", true);
@@ -274,9 +518,10 @@
                 const username = document.getElementById("ownerUsername").value.trim();
                 const newPassword = password.value;
                 const amount = Number(document.getElementById("rentalAmount").value);
-                const dueDate = document.getElementById("rentalDueDate").value;
-                if (!ownerName || !storeName || !username || !dueDate || !Number.isFinite(amount) || amount < 0) {
-                    showToast("Enter a valid owner, store, rental amount and due date.", true);
+                const dueDay = Number(document.getElementById("rentalDueDay").value);
+                const startMonth = document.getElementById("rentalStartMonth").value;
+                if (!ownerName || !storeName || !username || !startMonth || !Number.isInteger(dueDay) || dueDay < 1 || dueDay > 31 || !Number.isFinite(amount) || amount < 0) {
+                    showToast("Enter a valid owner, store, rental amount, due day and first billing month.", true);
                     return;
                 }
                 if (newPassword && newPassword.length < 4) {
@@ -308,17 +553,20 @@
                         owner.passwordHashAlgorithm = "SHA-256";
                         delete owner.password;
                     }
+                    if (owner.disabledReason === "rental") {
+                        owner.status = "active";
+                        delete owner.disabledReason;
+                    }
                     if (!currentOwner) users.push(owner);
                     const rentals = readRentals();
                     const previousRental = rentals[owner.id] || {};
-                    const dueDateChanged = Boolean(previousRental.dueDate && previousRental.dueDate !== dueDate);
                     rentals[owner.id] = {
                         amount: amount,
-                        dueDate: dueDate,
-                        paid: dueDateChanged ? false : Boolean(previousRental.paid),
-                        verifiedAt: dueDateChanged ? null : previousRental.verifiedAt || null,
-                        verifiedBy: dueDateChanged ? null : previousRental.verifiedBy || null
+                        dueDay: dueDay,
+                        startMonth: startMonth,
+                        paymentHistory: previousRental.paymentHistory || {}
                     };
+                    reconcileOwnerAccess(users, rentals);
                     localStorage.setItem(USERS_KEY, JSON.stringify(users));
                     localStorage.setItem(RENTALS_KEY, JSON.stringify(rentals));
                     dialog.close();
@@ -329,6 +577,12 @@
                 }
             });
 
+            historyDialog.addEventListener("click", function(event) {
+                if (event.target === historyDialog) historyDialog.close();
+            });
+            dialog.addEventListener("click", function(event) {
+                if (event.target === dialog) dialog.close();
+            });
             render();
         })();
     </script>
