@@ -67,6 +67,10 @@
         .history-row strong{color:#1F2937;font-size:14px}
         .history-row span{display:block;margin-top:3px;color:#64748B;font-size:12px}
         .history-row button{min-height:32px;padding:0 10px;border:1px solid #CFE2D5;border-radius:7px;background:#EAF5EF;color:#0B5D3B;font:600 12px Inter,"Segoe UI",Arial,sans-serif;cursor:pointer}
+        .history-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+        .history-actions .danger-action{border-color:#F4C7C7;background:#FDECEC;color:#B42318}
+        .receipt-dialog{width:min(900px,calc(100% - 28px))}
+        .receipt-preview{width:100%;height:min(68vh,720px);border:1px solid #DCE6E1;border-radius:9px;background:#F8FBF9}
         .rental-toast{position:fixed;right:24px;bottom:24px;z-index:30;padding:12px 15px;border:1px solid #DCE6E1;border-radius:9px;background:#fff;color:#1F2937;font-size:14px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}
         .rental-toast.show{opacity:1;transform:translateY(0)}
         .rental-toast.error{border-color:#F4C7C7;color:#B42318}
@@ -147,8 +151,16 @@
             <div class="dialog-actions"><button class="rental-secondary" id="doneHistory" type="button">Done</button></div>
         </div>
     </dialog>
+    <dialog class="rental-dialog receipt-dialog" id="receiptDialog">
+        <div class="rental-dialog-content">
+            <div class="dialog-heading"><div><h3 id="receiptTitle">Payment receipt</h3><p id="receiptFileName"></p></div><button type="button" class="dialog-close" id="closeReceipt" aria-label="Close">×</button></div>
+            <iframe class="receipt-preview" id="receiptPreview" title="Payment receipt preview"></iframe>
+            <div class="dialog-actions"><button class="rental-secondary" id="doneReceipt" type="button">Done</button></div>
+        </div>
+    </dialog>
     <div class="rental-toast" id="rentalToast" role="status" aria-live="polite"></div>
     <script src="../js/app.js"></script>
+    <script src="../js/rental-receipts.js"></script>
     <script>
         (function() {
             "use strict";
@@ -170,11 +182,13 @@
             const empty = document.getElementById("rentalEmpty");
             const dialog = document.getElementById("ownerDialog");
             const historyDialog = document.getElementById("historyDialog");
+            const receiptDialog = document.getElementById("receiptDialog");
             const form = document.getElementById("ownerForm");
             const password = document.getElementById("ownerPassword");
             const toast = document.getElementById("rentalToast");
             let toastTimer;
             let historyOwnerId = null;
+            let receiptObjectUrl = null;
 
             function readArray(key) {
                 const value = JSON.parse(localStorage.getItem(key) || "[]");
@@ -209,6 +223,10 @@
                     }
                     if (!rental.paymentHistory || typeof rental.paymentHistory !== "object" || Array.isArray(rental.paymentHistory)) {
                         rental.paymentHistory = {};
+                        migrated = true;
+                    }
+                    if (!rental.pendingPayments || typeof rental.pendingPayments !== "object" || Array.isArray(rental.pendingPayments)) {
+                        rental.pendingPayments = {};
                         migrated = true;
                     }
                 });
@@ -256,6 +274,24 @@
                 return cycles;
             }
 
+            function historyCycles(rental) {
+                if (!rental || !/^\d{4}-\d{2}$/.test(String(rental.startMonth || ""))) return [];
+                const [startYear, startMonth] = rental.startMonth.split("-").map(Number);
+                const first = new Date(startYear, startMonth - 1, 1);
+                const today = new Date();
+                const current = new Date(today.getFullYear(), today.getMonth(), 1);
+                const dueDay = Math.min(31, Math.max(1, Number(rental.dueDay) || 1));
+                const cycles = [];
+                for (let month = new Date(first); month <= current; month.setMonth(month.getMonth() + 1)) {
+                    const key = monthKey(month);
+                    const dueDate = new Date(month.getFullYear(), month.getMonth(), Math.min(dueDay, new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate()));
+                    if (dueDate <= today || rental.pendingPayments[key]) {
+                        cycles.push({month:key, dueDate:dueDate, payment:rental.paymentHistory[key], submission:rental.pendingPayments[key]});
+                    }
+                }
+                return cycles;
+            }
+
             function outstandingCycles(rental) {
                 return dueCycles(rental).filter(function(cycle) { return !cycle.payment; });
             }
@@ -292,6 +328,9 @@
 
             function rentalState(rental, outstanding) {
                 if (!rental || !rental.startMonth) return {label:"Not configured", className:"status-unset"};
+                if (Object.keys(rental.pendingPayments || {}).length) {
+                    return {label:"Payment pending review", className:"status-due"};
+                }
                 if (!outstanding.length && dueCycles(rental).length) return {label:"Paid", className:"status-paid"};
                 if (outstanding.some(function(cycle) {
                     return cycle.dueDate < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
@@ -407,19 +446,35 @@
                     const rental = readRentals()[ownerId];
                     if (!owner || !rental) throw new Error("Rental details not found.");
                     historyOwnerId = ownerId;
-                    const cycles = dueCycles(rental);
+                    const cycles = historyCycles(rental);
                     const outstanding = cycles.filter(function(cycle) { return !cycle.payment; });
-                    const amountDue = outstanding.length * (Number(rental.amount) || 0);
+                    const dueOutstanding = outstanding.filter(function(cycle) { return cycle.dueDate <= new Date(); });
+                    const amountDue = dueOutstanding.length * (Number(rental.amount) || 0);
                     document.getElementById("historyTitle").textContent = (owner.storeName || owner.name || "Store") + " payment history";
-                    document.getElementById("historySummary").textContent = outstanding.length
-                        ? outstanding.length + " unpaid month" + (outstanding.length === 1 ? "" : "s") + " · ₱" + amountDue.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + " total outstanding"
-                        : "No outstanding rent for due months.";
+                    const pendingCount = cycles.filter(function(cycle) { return !cycle.payment && cycle.submission; }).length;
+                    const summaryParts = [];
+                    summaryParts.push(dueOutstanding.length
+                        ? dueOutstanding.length + " unpaid due month" + (dueOutstanding.length === 1 ? "" : "s") + " · ₱" + amountDue.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + " outstanding"
+                        : "No outstanding rent for due months");
+                    if (pendingCount) summaryParts.push(pendingCount + " receipt" + (pendingCount === 1 ? "" : "s") + " awaiting review");
+                    document.getElementById("historySummary").textContent = summaryParts.join(" · ") + ".";
                     document.getElementById("historyList").innerHTML = cycles.length ? cycles.map(function(cycle) {
                         const paid = Boolean(cycle.payment);
+                        const submission = cycle.submission || (cycle.payment && cycle.payment.receipt);
                         const detail = paid
                             ? "Paid " + new Date(cycle.payment.paidAt).toLocaleDateString() + (cycle.payment.verifiedBy ? " · " + escapeHTML(cycle.payment.verifiedBy) : "")
-                            : "₱" + (Number(rental.amount) || 0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + " unpaid";
-                        return '<div class="history-row"><div><strong>' + escapeHTML(formatMonth(cycle.month)) + '</strong><span>' + detail + '</span></div><button type="button" data-cycle="' + cycle.month + '">' + (paid ? "Mark unpaid" : "Verify paid") + '</button></div>';
+                            : cycle.submission
+                                ? "Receipt submitted " + new Date(cycle.submission.submittedAt).toLocaleDateString() + " · awaiting review"
+                                : cycle.dueDate > new Date()
+                                    ? "Not due yet"
+                                    : "₱" + (Number(rental.amount) || 0).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + " unpaid";
+                        const viewButton = submission ? '<button type="button" data-cycle="' + cycle.month + '" data-action="view">View receipt</button>' : "";
+                        const actions = cycle.submission
+                            ? viewButton + '<button type="button" data-cycle="' + cycle.month + '" data-action="verify">Verify paid</button><button type="button" class="danger-action" data-cycle="' + cycle.month + '" data-action="reject">Reject</button>'
+                            : viewButton + (paid
+                                ? '<button type="button" data-cycle="' + cycle.month + '" data-action="toggle">Mark unpaid</button>'
+                                : cycle.dueDate <= new Date() ? '<button type="button" data-cycle="' + cycle.month + '" data-action="toggle">Verify paid</button>' : "");
+                        return '<div class="history-row"><div><strong>' + escapeHTML(formatMonth(cycle.month)) + '</strong><span>' + detail + (submission ? ' · ' + escapeHTML(submission.fileName || "receipt") : "") + '</span></div><div class="history-actions">' + actions + '</div></div>';
                     }).join("") : '<div class="rental-empty">No billing months are due yet.</div>';
                     historyDialog.showModal();
                 } catch (error) {
@@ -432,6 +487,8 @@
             document.getElementById("cancelDialog").addEventListener("click", function() { dialog.close(); });
             document.getElementById("closeHistory").addEventListener("click", function() { historyDialog.close(); });
             document.getElementById("doneHistory").addEventListener("click", function() { historyDialog.close(); });
+            document.getElementById("closeReceipt").addEventListener("click", function() { receiptDialog.close(); });
+            document.getElementById("doneReceipt").addEventListener("click", function() { receiptDialog.close(); });
             document.getElementById("ownerSearch").addEventListener("input", render);
             rows.addEventListener("click", function(event) {
                 const editButton = event.target.closest("[data-edit]");
@@ -479,30 +536,76 @@
                     const rentals = readRentals();
                     delete rentals[ownerId];
                     localStorage.setItem(RENTALS_KEY, JSON.stringify(rentals));
+                    window.RentPaymentReceipts.removeOwner(ownerId).catch(function(error) {
+                        showToast(error.message || "Could not remove the owner's stored receipts.", true);
+                    });
                     showToast("Store owner account deleted.", false);
                     render();
                 }
             });
 
-            document.getElementById("historyList").addEventListener("click", function(event) {
-                const button = event.target.closest("[data-cycle]");
+            document.getElementById("historyList").addEventListener("click", async function(event) {
+                const button = event.target.closest("[data-cycle][data-action]");
                 if (!button || !historyOwnerId) return;
                 try {
                     const rentals = readRentals();
                     const rental = rentals[historyOwnerId];
                     if (!rental) throw new Error("Rental details not found.");
                     rental.paymentHistory = rental.paymentHistory || {};
-                    if (rental.paymentHistory[button.dataset.cycle]) {
-                        delete rental.paymentHistory[button.dataset.cycle];
-                    } else {
-                        rental.paymentHistory[button.dataset.cycle] = {
-                            paidAt: new Date().toISOString(),
-                            verifiedBy: session.name || session.username
+                    rental.pendingPayments = rental.pendingPayments || {};
+                    const month = button.dataset.cycle;
+                    const action = button.dataset.action;
+                    let receiptCleanupFailed = false;
+                    if (action === "view") {
+                        const receipt = await window.RentPaymentReceipts.get(historyOwnerId, month);
+                        if (!receipt || !receipt.blob) throw new Error("Receipt file is unavailable.");
+                        if (receiptObjectUrl) URL.revokeObjectURL(receiptObjectUrl);
+                        receiptObjectUrl = URL.createObjectURL(receipt.blob);
+                        document.getElementById("receiptTitle").textContent = (ownerUsers().find(function(user) { return String(user.id) === historyOwnerId; }) || {}).storeName || "Payment receipt";
+                        document.getElementById("receiptFileName").textContent = receipt.fileName || "Payment receipt";
+                        document.getElementById("receiptPreview").src = receiptObjectUrl;
+                        receiptDialog.showModal();
+                        return;
+                    }
+                    if (action === "verify") {
+                        const submission = rental.pendingPayments[month];
+                        if (!submission) throw new Error("Payment submission not found.");
+                        rental.paymentHistory[month] = {
+                            paidAt:new Date().toISOString(),
+                            verifiedBy:session.name || session.username,
+                            receipt:submission
                         };
+                        delete rental.pendingPayments[month];
+                    } else if (action === "reject") {
+                        const submission = rental.pendingPayments[month];
+                        if (!submission) throw new Error("Payment submission not found.");
+                        delete rental.pendingPayments[month];
+                    } else if (action === "toggle") {
+                        if (rental.paymentHistory[month]) {
+                            if (rental.paymentHistory[month].receipt) {
+                                rental.pendingPayments[month] = rental.paymentHistory[month].receipt;
+                            }
+                            delete rental.paymentHistory[month];
+                        } else {
+                            rental.paymentHistory[month] = {
+                                paidAt: new Date().toISOString(),
+                                verifiedBy: session.name || session.username
+                            };
+                        }
                     }
                     localStorage.setItem(RENTALS_KEY, JSON.stringify(rentals));
+                    if (action === "reject") {
+                        try {
+                            await window.RentPaymentReceipts.remove(historyOwnerId, month);
+                        } catch (error) {
+                            receiptCleanupFailed = true;
+                        }
+                    }
                     reconcileOwnerAccess(readArray(USERS_KEY), rentals);
-                    showToast(rental.paymentHistory[button.dataset.cycle] ? "Payment verified and marked as paid." : "Payment marked as unpaid.", false);
+                    showToast(receiptCleanupFailed
+                        ? "Receipt rejected, but its stored file could not be removed."
+                        : action === "verify" ? "Payment verified and marked as paid." : action === "reject" ? "Payment receipt rejected." : rental.paymentHistory[month] ? "Payment verified and marked as paid." : "Payment marked as unpaid.",
+                    receiptCleanupFailed);
                     openPaymentHistory(historyOwnerId);
                     render();
                 } catch (error) {
@@ -579,6 +682,16 @@
 
             historyDialog.addEventListener("click", function(event) {
                 if (event.target === historyDialog) historyDialog.close();
+            });
+            receiptDialog.addEventListener("click", function(event) {
+                if (event.target === receiptDialog) receiptDialog.close();
+            });
+            receiptDialog.addEventListener("close", function() {
+                document.getElementById("receiptPreview").src = "about:blank";
+                if (receiptObjectUrl) {
+                    URL.revokeObjectURL(receiptObjectUrl);
+                    receiptObjectUrl = null;
+                }
             });
             dialog.addEventListener("click", function(event) {
                 if (event.target === dialog) dialog.close();

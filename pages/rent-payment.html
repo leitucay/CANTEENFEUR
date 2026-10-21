@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Payments - FEU CANTEEN</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/canteen_motion.css">
+    <link rel="stylesheet" href="../css/canteen_theme.css">
+    <style>
+        .rent-page{max-width:1100px;margin:auto;padding:30px 38px;color:#1F2937;font-family:Inter,"Segoe UI",Arial,sans-serif}
+        .rent-heading{margin-bottom:22px}.rent-heading h2{margin-top:8px;color:#064E3B;font-size:36px;font-weight:750}.rent-heading p{margin-top:7px;color:#475569;font-size:15px;line-height:1.5}
+        .rent-summary,.rent-cycle{border:1px solid #DCE6E1;border-radius:14px;background:#fff;box-shadow:0 4px 14px rgba(15,55,37,.06)}
+        .rent-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:18px;margin-bottom:16px}
+        .rent-summary span{display:block;color:#64748B;font-size:12px;font-weight:700;text-transform:uppercase}.rent-summary strong{display:block;margin-top:6px;color:#0B3D2E;font-size:20px}
+        .rent-cycle-list{display:grid;gap:12px}.rent-cycle{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:18px}
+        .rent-cycle h3{color:#0B3D2E;font-size:18px}.rent-cycle p{margin-top:5px;color:#64748B;font-size:13px}
+        .rent-state{display:inline-flex;margin-top:9px;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:700}.rent-paid{background:#EAF5EF;color:#0B5D3B}.rent-pending{background:#FFF5D8;color:#805B00}.rent-unpaid{background:#FDECEC;color:#B42318}.rent-upcoming{background:#F1F5F9;color:#475569}
+        .rent-upload{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border:1px solid #0B5D3B;border-radius:8px;background:#0B5D3B;color:#fff;font:650 13px Inter,"Segoe UI",Arial,sans-serif;cursor:pointer;white-space:nowrap}
+        .rent-upload:hover{background:#137A4B}.rent-upload input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+        .rent-upload input:focus-visible+.upload-text{outline:3px solid rgba(19,122,75,.35);outline-offset:3px}.rent-upload:has(input:disabled){opacity:.55;cursor:not-allowed}
+        .rent-empty{padding:32px 16px;border:1px solid #DCE6E1;border-radius:14px;background:#fff;color:#475569;text-align:center}
+        .rent-toast{position:fixed;right:24px;bottom:24px;z-index:30;padding:12px 15px;border:1px solid #DCE6E1;border-radius:9px;background:#fff;color:#1F2937;font-size:14px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}
+        .rent-toast.show{opacity:1;transform:translateY(0)}.rent-toast.error{border-color:#F4C7C7;color:#B42318}
+        @media(max-width:650px){.rent-page{padding:24px 15px}.rent-heading h2{font-size:30px}.rent-summary{grid-template-columns:1fr}.rent-cycle{align-items:flex-start;flex-direction:column}.rent-upload{width:100%}}
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7.7"/><circle cx="12" cy="12" r="5.2"/><path d="M3 3v5m-1.5-5v3M4.5 3v3M3 8v13M20 3c-2 2-2.5 5-2.5 8h3V3zm0 8v10"/></svg></div>
+            <div><h1>FEU CANTEEN</h1><span>POINT OF SALE SYSTEM</span></div>
+        </div>
+        <nav class="navigation">
+            <a href="../index.html" class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></span><span>Dashboard</span></a>
+            <a href="pos.html" class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.2 11.1a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 1.9-1.4L22 8H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg></span><span>POS</span></a>
+            <a href="products.html" class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h18M5 8c.4 6 3.1 9 7 9s6.6-3 7-9"/><path d="M5 5h14M7 12h10M9 15h6"/></svg></span><span>Products</span></a>
+            <a href="inventory.html" class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 4.5v9L12 21l-9-4.5v-9z"/><path d="m3.5 7.7 8.5 4.5 8.5-4.5M12 12.2V21"/></svg></span><span>Inventory</span></a>
+            <a href="sales.html" class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5L6 21z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span><span>Sales</span></a>
+            <a href="customers.html" class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1zM16 5.5a3 3 0 0 1 0 5.8M18 14a4.5 4.5 0 0 1 3 4.3V20h-3"/></svg></span><span>Customers</span></a>
+            <a href="reports.html" class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V11h4v9M10 20V5h4v15M16 20v-7h4v7M3 20h18"/></svg></span><span>Reports</span></a>
+            <a href="settings.html" class="nav-item"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7.5"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2m-4.34-9.66 1.42 1.42m-14.16 14.16 1.42 1.42m11.32 0 1.42-1.42M4.34 4.34 5.76 5.76"/></svg></span><span>Settings</span></a>
+        </nav>
+    </aside>
+    <main class="main-content">
+        <header class="topbar">
+            <div class="mobile-brand"><strong>FEU CANTEEN</strong></div>
+            <div class="topbar-right"><div class="live-time"><span class="live-dot"></span><span id="liveTime">--:--:-- --</span></div>
+                <div class="profile"><div class="profile-avatar"><span class="profile-avatar-text">FEU</span></div><div class="profile-info"><strong>Store Owner</strong><span>Owner</span></div><span class="profile-chevron" aria-hidden="true">&#8964;</span></div>
+            </div>
+        </header>
+        <section class="rent-page">
+            <div class="rent-heading"><span class="eyebrow">STORE ACCOUNT</span><h2>Rent Payments</h2><p>Upload a JPG, PNG, WEBP or PDF receipt (up to 5 MB) for each billing month. The school administrator will review and verify your payment.</p></div>
+            <div class="rent-summary">
+                <div><span>Monthly rent</span><strong id="monthlyRent">—</strong></div>
+                <div><span>Payment due</span><strong id="rentDueDay">—</strong></div>
+                <div><span>Months awaiting review</span><strong id="pendingCount">0</strong></div>
+            </div>
+            <div class="rent-cycle-list" id="rentCycles"></div>
+            <div class="rent-empty" id="rentEmpty" hidden>Rent has not been configured for this store. Contact the school administrator.</div>
+        </section>
+        <footer><span>Powered by FEU Canteen</span><span>RENT PAYMENTS</span></footer>
+    </main>
+    <div class="rent-toast" id="rentToast" role="status" aria-live="polite"></div>
+    <script src="../js/app.js"></script>
+    <script src="../js/rental-receipts.js"></script>
+    <script>
+        (function() {
+            "use strict";
+            const SESSION_KEY = "feuCanteenSession";
+            const RENTALS_KEY = "feuCanteenRentals";
+            const USERS_KEY = "feuCanteenUsers";
+            const MAX_FILE_SIZE = 5 * 1024 * 1024;
+            let session;
+            try {
+                session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+            } catch (error) {
+                session = null;
+            }
+            if (!session || String(session.role || "").toLowerCase() !== "administrator") {
+                window.location.href = "../index.html";
+                return;
+            }
+
+            const list = document.getElementById("rentCycles");
+            const empty = document.getElementById("rentEmpty");
+            const toast = document.getElementById("rentToast");
+            let toastTimer;
+            let owner;
+            let rental;
+
+            function escapeHTML(value) {
+                return String(value == null ? "" : value).replace(/[&<>"']/g, function(character) {
+                    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character];
+                });
+            }
+
+            function showToast(message, isError) {
+                clearTimeout(toastTimer);
+                toast.textContent = message;
+                toast.classList.toggle("error", Boolean(isError));
+                toast.classList.add("show");
+                toastTimer = setTimeout(function() { toast.classList.remove("show"); }, 3500);
+            }
+
+            function monthKey(date) {
+                return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0")].join("-");
+            }
+
+            function formatMonth(value) {
+                const [year, month] = value.split("-").map(Number);
+                return new Date(year, month - 1, 1).toLocaleDateString(undefined, {month:"long", year:"numeric"});
+            }
+
+            function readRental() {
+                const users = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
+                if (!Array.isArray(users)) throw new Error("Stored account data is invalid.");
+                owner = users.find(function(user) {
+                    return String(user.id) === String(session.id) ||
+                        String(user.username || "").toLowerCase() === String(session.username || "").toLowerCase();
+                });
+                if (!owner) throw new Error("Store owner account not found.");
+                const rentals = JSON.parse(localStorage.getItem(RENTALS_KEY) || "{}");
+                if (!rentals || typeof rentals !== "object" || Array.isArray(rentals)) {
+                    throw new Error("Stored rental data is invalid.");
+                }
+                rental = rentals[owner.id];
+                if (rental && (!rental.paymentHistory || typeof rental.paymentHistory !== "object" || Array.isArray(rental.paymentHistory))) {
+                    rental.paymentHistory = {};
+                }
+                if (rental && (!rental.pendingPayments || typeof rental.pendingPayments !== "object" || Array.isArray(rental.pendingPayments))) {
+                    rental.pendingPayments = {};
+                }
+            }
+
+            function getCycles() {
+                if (!rental || !/^\d{4}-\d{2}$/.test(String(rental.startMonth || ""))) return [];
+                const [year, month] = rental.startMonth.split("-").map(Number);
+                const first = new Date(year, month - 1, 1);
+                const today = new Date();
+                const current = new Date(today.getFullYear(), today.getMonth(), 1);
+                const dueDay = Math.min(31, Math.max(1, Number(rental.dueDay) || 1));
+                const cycles = [];
+                for (let date = new Date(first); date <= current; date.setMonth(date.getMonth() + 1)) {
+                    const dueDate = new Date(date.getFullYear(), date.getMonth(), Math.min(dueDay, new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()));
+                    const key = monthKey(date);
+                    cycles.push({month:key, dueDate:dueDate, payment:rental.paymentHistory[key], submission:rental.pendingPayments[key]});
+                }
+                return cycles;
+            }
+
+            function render() {
+                try {
+                    readRental();
+                    if (!rental || !/^\d{4}-\d{2}$/.test(String(rental.startMonth || ""))) {
+                        list.innerHTML = "";
+                        empty.hidden = false;
+                        return;
+                    }
+                    empty.hidden = true;
+                    const amount = Number(rental.amount) || 0;
+                    document.getElementById("monthlyRent").textContent = "₱" + amount.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+                    document.getElementById("rentDueDay").textContent = "Every " + rental.dueDay + " of the month";
+                    const cycles = getCycles();
+                    document.getElementById("pendingCount").textContent = String(cycles.filter(function(cycle) { return !cycle.payment && cycle.submission; }).length);
+                    list.innerHTML = cycles.length ? cycles.map(function(cycle) {
+                        const paid = Boolean(cycle.payment);
+                        const pending = !paid && Boolean(cycle.submission);
+                        const overdue = !paid && !pending && cycle.dueDate < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+                        const label = paid ? "Paid" : pending ? "Awaiting review" : overdue ? "Overdue" : "Upcoming";
+                        const stateClass = paid ? "rent-paid" : pending ? "rent-pending" : overdue ? "rent-unpaid" : "rent-upcoming";
+                        const detail = paid
+                            ? "Verified " + new Date(cycle.payment.paidAt).toLocaleDateString()
+                            : pending
+                                ? "Receipt submitted " + new Date(cycle.submission.submittedAt).toLocaleDateString() + " · " + escapeHTML(cycle.submission.fileName)
+                                : "Due " + cycle.dueDate.toLocaleDateString();
+                        const upload = paid ? "" : '<label class="rent-upload"><input type="file" data-upload-month="' + cycle.month + '" accept="image/jpeg,image/png,image/webp,application/pdf"><span class="upload-text">' + (pending ? "Replace receipt" : "Upload receipt") + '</span></label>';
+                        return '<article class="rent-cycle"><div><h3>' + escapeHTML(formatMonth(cycle.month)) + '</h3><p>' + detail + '</p><span class="rent-state ' + stateClass + '">' + label + '</span></div>' + upload + '</article>';
+                    }).join("") : '<div class="rent-empty">No rent billing months are available yet.</div>';
+                } catch (error) {
+                    list.innerHTML = "";
+                    empty.hidden = false;
+                    empty.textContent = error.message || "Could not load rent details.";
+                    showToast(error.message || "Could not load rent details.", true);
+                }
+            }
+
+            list.addEventListener("change", async function(event) {
+                const input = event.target.closest("[data-upload-month]");
+                if (!input || !input.files || !input.files[0]) return;
+                const file = input.files[0];
+                const month = input.dataset.uploadMonth;
+                input.disabled = true;
+                try {
+                    if (!["image/jpeg", "image/png", "image/webp", "application/pdf"].includes(file.type)) {
+                        throw new Error("Choose a JPG, PNG, WEBP or PDF receipt.");
+                    }
+                    if (file.size > MAX_FILE_SIZE) throw new Error("Receipt must be 5 MB or smaller.");
+                    if (!file.size) throw new Error("The selected receipt is empty.");
+                    readRental();
+                    const cycle = getCycles().find(function(item) { return item.month === month; });
+                    if (!cycle || cycle.payment) throw new Error("This rent month is no longer available for submission.");
+                    const submission = {
+                        fileName:file.name,
+                        mimeType:file.type,
+                        submittedAt:new Date().toISOString(),
+                        submittedBy:owner.name || owner.username
+                    };
+                    await window.RentPaymentReceipts.save(owner.id, month, file);
+                    rental.pendingPayments[month] = submission;
+                    try {
+                        const allRentals = JSON.parse(localStorage.getItem(RENTALS_KEY) || "{}");
+                        allRentals[owner.id] = rental;
+                        localStorage.setItem(RENTALS_KEY, JSON.stringify(allRentals));
+                    } catch (error) {
+                        await window.RentPaymentReceipts.remove(owner.id, month);
+                        throw error;
+                    }
+                    showToast("Rent receipt submitted for " + formatMonth(month) + ".", false);
+                    render();
+                } catch (error) {
+                    showToast(error.message || "Could not submit rent receipt.", true);
+                    input.value = "";
+                } finally {
+                    input.disabled = false;
+                }
+            });
+
+            render();
+        })();
+    </script>
+</body>
+</html>
