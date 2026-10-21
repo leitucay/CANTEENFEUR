@@ -117,7 +117,7 @@
         "customers.html"
     ];
 
-    const adminOnlyPages = ["products.html", "inventory.html", "reports.html", "customers.html", "settings.html", "account.html", "rental.html"];
+    const adminOnlyPages = ["products.html", "inventory.html", "reports.html", "customers.html", "settings.html", "account.html", "rental.html", "rent-payment.html"];
 
     if (
         currentPage !== "login.html"
@@ -178,6 +178,8 @@
 
             setupSuperadminNavigation();
 
+            setupOwnerRentalNavigation();
+
             setupUserSession();
 
             setupMobileNavigation();
@@ -203,6 +205,26 @@
             : "pages/rental.html";
         link.className = "nav-item";
         link.innerHTML = '<span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h3"/></svg></span><span>Rental Management</span>';
+        const settingsLink = navigation.querySelector('a[href$="settings.html"]');
+        navigation.insertBefore(link, settingsLink || null);
+    }
+
+    function setupOwnerRentalNavigation() {
+        if (String(currentSession && currentSession.role || "").toLowerCase() !== "administrator") {
+            return;
+        }
+
+        const navigation = document.querySelector(".navigation");
+        if (!navigation || navigation.querySelector('a[href$="rent-payment.html"]')) {
+            return;
+        }
+
+        const link = document.createElement("a");
+        link.href = window.location.pathname.includes("/pages/")
+            ? "rent-payment.html"
+            : "pages/rent-payment.html";
+        link.className = currentPage === "rent-payment.html" ? "nav-item active" : "nav-item";
+        link.innerHTML = '<span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h3"/></svg></span><span>Rent Payments</span>';
         const settingsLink = navigation.querySelector('a[href$="settings.html"]');
         navigation.insertBefore(link, settingsLink || null);
     }
@@ -378,6 +400,16 @@
             rentalLink.setAttribute("role", "menuitem");
             rentalLink.textContent = "Rental Management";
             dropdown.appendChild(rentalLink);
+        }
+
+        if (normalizedRole === "administrator") {
+            const rentPaymentLink = document.createElement("a");
+            rentPaymentLink.href = window.location.pathname.includes("/pages/")
+                ? "rent-payment.html"
+                : "pages/rent-payment.html";
+            rentPaymentLink.setAttribute("role", "menuitem");
+            rentPaymentLink.textContent = "Rent Payments";
+            dropdown.appendChild(rentPaymentLink);
         }
 
         document.body.appendChild(dropdown);
